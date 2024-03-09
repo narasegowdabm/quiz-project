@@ -9,9 +9,11 @@ const router = express.Router();
 
 router.post('/login', async (request, response) => {
     const { errors, isValid } = loginValidator(request.body);
+
     if(!isValid) {
         response.json({ success: false, errors });
-    } else {
+    } 
+    else {
         Users.findOne({ email: request.body.email }).then(user => {
             if(!user) {
                 response.json({ message: "Email does not exist", success: false });
@@ -50,12 +52,12 @@ router.post('/register', async (req, res) => {
         return res.status(400).json({ success: false, errors });
     }
     else{
-        const { firstName, lastName, email, password } = req.body;
+        const { email, password, firstName, lastName } = req.body;
         const registerUser = new Users({
-            firstName,
-            lastName,
             email,
-            password
+            password,
+            firstName,
+            lastName,          
         });
         bcrypt.genSalt(10, (err, salt) => {
             bcrypt.hash(registerUser.password, salt, (hashErr, hash) => {
